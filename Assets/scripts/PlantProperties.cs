@@ -9,6 +9,7 @@ using UnityEngine.Tilemaps;
 public class PlantProperties 
 {
     public int plantIndex;
+    public string name;
     public TileBase plantGrowingTile;
     public TileBase fullyGrownPlantTile;
     public float growthTime;
@@ -22,9 +23,10 @@ public class PlantProperties
     /// <param name="fullyGrownTile">Переданный спрайт выращенного растения.</param>
     /// <param name="growthTime">Переданное время выращивания.</param>
     /// <param name="price">Переданная цена.</param>
-    public PlantProperties(int index, TileBase growingTile, TileBase fullyGrownTile, float growthTime, int price)
+    public PlantProperties(int index, string name, TileBase growingTile, TileBase fullyGrownTile, float growthTime, int price)
     {
         this.plantIndex = index;
+        this.name = name;
         this.plantGrowingTile = growingTile;
         this.fullyGrownPlantTile = fullyGrownTile;
         this.growthTime = growthTime;

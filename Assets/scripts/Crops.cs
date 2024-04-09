@@ -14,12 +14,15 @@ public class Crops : MonoBehaviour
     private bool isPlanted; // Флаг, указывающий, что в клетке посажено растение
     private bool isFullyGrown; // Флаг, указывающий, что растение полностью выросло
 
+    public float interactionRadius = 3f; // Радиус взаимодействия с объектами
+    public LayerMask interactableLayer; // Слой, содержащий объекты, с которыми можно взаимодействовать
+
     public List<PlantProperties> plantList = new List<PlantProperties>();
 
-    
+
     void Start()
     {
-        plantList.Add(new PlantProperties(0, Resources.Load<TileBase>("Sprites/Grass2"), Resources.Load<TileBase>("Sprites/Grass1"), 3f, 25));
+        plantList.Add(new PlantProperties(0, "Гриб", Resources.Load<TileBase>("Sprites/Grass2"), Resources.Load<TileBase>("Sprites/Grass1"), 3f, 25));
     }
     void Update()
     {
@@ -32,10 +35,15 @@ public class Crops : MonoBehaviour
         Vector3Int playerCellPos = groundTilemap.WorldToCell(playerWorldPos);
 
         // Проверяем расстояние от клетки до игрока
-        isNearPlayer = Vector3Int.Distance(mouseCellPos, playerCellPos) <= 3;
+        isNearPlayer = Vector3Int.Distance(mouseCellPos, playerCellPos) <= interactionRadius;
+
+        // Проверяем, есть ли объекты с коллайдерами в радиусе взаимодействия с игроком
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(playerWorldPos, interactionRadius, interactableLayer);
+
+        bool hasCollidersNearby = colliders.Length > 0;
 
         // Обработка нажатия клавиши (например, клавиши мыши)
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && !hasCollidersNearby) // Добавляем условие, что нельзя копать грядки, если есть объекты с коллайдерами рядом
         {
             // Получаем состояние клетки, на которую нажал игрок
             GetCellState(mouseCellPos);
